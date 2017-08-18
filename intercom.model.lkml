@@ -1,4 +1,4 @@
-connection: "intercom"
+connection: "blendo_database"
 
 # include all the views
 include: "*.view"
@@ -23,6 +23,11 @@ explore: cont_ic_conversations_parts {
     type: left_outer
     sql_on: ${cont_ic_conversations_parts.assigned_to_id} = ${cont_ic_admins.id} ;;
     relationship: many_to_one
+  }
+  join: first_resolution {
+    type: left_outer
+    sql_on: ${cont_ic_conversations_parts.conversation_id} = ${first_resolution.conversation_id};;
+    relationship: one_to_one
   }
 
 }
