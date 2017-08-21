@@ -1,7 +1,8 @@
 view: first_resolution {
   derived_table: {
     sql:  SELECT  EXTRACT(epoch FROM (fRe.firstResolution - fOp.firstOpen))/3600 as dif,
-    date_trunc('day', fRe.firstResolution) as date
+    date_trunc('day', fRe.firstResolution) as date,
+    fRe.conversation_id as conversation_id
       FROM
       (SELECT conversation_id,
       min(updated_at) AS firstResolution
@@ -20,9 +21,17 @@ view: first_resolution {
  ;;
   }
 
+  dimension: conversation_id {
+    type: string
+    sql: ${TABLE}.conversation_id ;;
+  }
+
   measure: maximum {
+    description: "Max time in Hours"
     type: max
     sql: ${TABLE}.dif ;;
+    value_format_name: decimal_1
+    drill_fields: [conversation_id, cont_ic_admins.name, cont_ic_admins.email]
   }
 
   measure: minimum {
@@ -39,6 +48,7 @@ view: first_resolution {
     type: median
     sql:${TABLE}.dif  ;;
   }
+
 
   dimension_group: date {
     type: time
