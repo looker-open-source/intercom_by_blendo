@@ -1,4 +1,4 @@
-connection: "intercom"
+connection: "blendo_database"
 
 # include all the views
 include: "*.view"
