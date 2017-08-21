@@ -4,7 +4,7 @@ view: req_wait_time {
               id
    FROM
      (SELECT tmp3.admin-tmp3.user AS timeDif,
-             id
+             id, tmp3.admin as date
       FROM
         (SELECT min(tmp2.admin) AS ADMIN,
                 tmp2.id,
@@ -31,27 +31,34 @@ view: req_wait_time {
        ;;
   }
 
-  measure: maximum {
-    type: max
-    sql: ${TABLE}.tD ;;
+  dimension: id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.id ;;
   }
 
-  measure: minimum {
-    type: min
-    sql:${TABLE}.tD ;;
-  }
-
-  measure: avg {
+  measure: average_requester_wait_time {
     type: average
     sql:${TABLE}.tD  ;;
   }
 
-  measure: med {
+  measure: maximum_requester_wait_time {
+    type: max
+    sql: ${TABLE}.tD ;;
+  }
+
+  measure: minimum_requester_wait_time {
+    type: min
+    sql:${TABLE}.tD ;;
+  }
+
+  measure: median_requester_wait_time {
     type: median
     sql:${TABLE}.tD  ;;
   }
 
   dimension_group: date {
+
     type: time
     timeframes: [date, day_of_week, week, month]
     sql: ${TABLE}.date ;;

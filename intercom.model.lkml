@@ -6,60 +6,49 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
-
-explore: cont_ic_conversations {
-  label: "Conversations"
-
-  join: cont_ic_admins {
-    type: left_outer
-    sql_on: ${cont_ic_conversations.assignee_id} = ${cont_ic_admins.id} ;;
-    relationship: many_to_one
-  }
-}
-
-explore: cont_ic_conversations_parts {
-  label: "Conversation Details"
-  join: cont_ic_admins {
-    type: left_outer
-    sql_on: ${cont_ic_conversations_parts.assigned_to_id} = ${cont_ic_admins.id} ;;
-    relationship: many_to_one
-  }
-  join: first_resolution {
-    type: left_outer
-    sql_on: ${cont_ic_conversations_parts.conversation_id} = ${first_resolution.conversation_id};;
-    relationship: one_to_one
-  }
-
-}
-
-explore: req_wait_time {
-  label: "Requester Wait Time"
-}
-
-explore: first_resolution {
-  label: "First Time Resolution"
-}
-
-explore:  first_response {
-  label: "First Time Response"
-}
-
-explore:full_resolution {
-  label: "Full Time Resolution"
-}
-
-explore: ticket_status {}
-
 explore: ticket_stats {
-  label: "Ticket Statistics"
+  label: "Agent Statistics"
   join: cont_ic_admins {
     type: left_outer
     sql_on: (${ticket_stats.assignee_id} = ${cont_ic_admins.id}) ;;
     relationship: many_to_one
   }
+  join: cont_ic_conversations {
+    type: left_outer
+    sql_on: ${cont_ic_conversations.assignee_id} = ${cont_ic_admins.id} ;;
+    relationship: many_to_many
+  }
 }
 
-explore: percent_of_tickets_solved {}
+explore: cont_ic_conversations_parts {
+  label: "Ticket Statistics"
+  join: cont_ic_admins {
+    type: left_outer
+    sql_on: ${cont_ic_conversations_parts.assigned_to_id} = ${cont_ic_admins.id} ;;
+    relationship: many_to_one
+  }
+  join: cont_ic_conversations {
+    type: left_outer
+    sql_on: ${cont_ic_conversations.id} = ${cont_ic_conversations_parts.conversation_id} ;;
+    relationship: many_to_one
+  }
+  join: resolution_metrics {
+    type: left_outer
+    sql_on: ${cont_ic_conversations_parts.conversation_id} = ${resolution_metrics.conversation_id};;
+    relationship: many_to_one
+  }
+
+  join: req_wait_time {
+    type: left_outer
+    sql_on: ${cont_ic_conversations_parts.conversation_id} = ${req_wait_time.id};;
+    relationship: many_to_one
+  }
+  join: ticket_status {
+    type: left_outer
+    sql_on: ${cont_ic_conversations_parts.conversation_id} = ${ticket_status.conversation_id};;
+    relationship: many_to_one
+  }
+}
 
 explore: cont_ic_users {
   label: "Users"

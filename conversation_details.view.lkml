@@ -5,15 +5,24 @@ view: cont_ic_conversations_parts {
     type:  count_distinct
     sql: ${TABLE}.id ;;
   }
-
-  measure: passed_tickets {
-    type:  count_distinct
-    sql: ${TABLE}.id ;;
-    filters: {
-      field: part_type
-      value: "assignment"
-    }
+# !!! from count  to distinct to remove error
+  measure: passes {
+    description: "Total number of assignments envolved"
+    type: count_distinct
+    sql: ${TABLE}.part_type = 'assignment' ;;
   }
+# !!! from count  to distinct to remove error
+#  measure: got_passed {
+#    description: "Checks if a ticket was re-assigned"
+#    type: count_distinct
+#    sql: ${passes} > 1 ;;
+#  }
+
+ # measure: one_touch {
+#    description: "Number of one_touch tickets"
+#    type: number
+#    sql: ${tickets_cnt}-${got_passed} ;;
+#  }
 
   dimension: id {
     primary_key: yes
@@ -26,10 +35,10 @@ view: cont_ic_conversations_parts {
     sql: ${TABLE}.assigned_to_id ;;
   }
 
-  dimension: assigned_to_type {
-    type: string
-    sql: ${TABLE}.assigned_to_type ;;
-  }
+ # dimension: assigned_to_type {
+#    type: string
+#    sql: ${TABLE}.assigned_to_type ;;
+#  }
 
   dimension: author_id {
     type: string
@@ -46,10 +55,10 @@ view: cont_ic_conversations_parts {
     sql: ${TABLE}.part_type ;;
   }
 
-  dimension: blendo_imported_at {
-    type: number
-    sql: ${TABLE}.blendo_imported_at ;;
-  }
+  #dimension: blendo_imported_at {
+  #  type: number
+  #  sql: ${TABLE}.blendo_imported_at ;;
+  #}
 
   dimension: body {
     type: string
@@ -65,11 +74,6 @@ view: cont_ic_conversations_parts {
     type: time
     timeframes: [time, date, week, month, raw]
     sql: ${TABLE}.updated_at;;
-  }
-
-  measure: last_update {
-    type:  date
-    sql:  MAX(${TABLE}.updated_at) ;;
   }
 
 }

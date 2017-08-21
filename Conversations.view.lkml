@@ -8,9 +8,26 @@ view: cont_ic_conversations {
   }
 
   measure: tickets_cnt {
+    description: "Total Number of Tickets"
     type:  count_distinct
     sql: ${id} ;;
   }
+
+  dimension: close{
+    type: yesno
+    sql: NOT ${TABLE}.open ;;
+  }
+
+  dimension: untouched{
+    type: yesno
+    sql: NOT ${TABLE}.read ;;
+  }
+
+  measure: percent_of_tickets{
+    type: percent_of_total
+    sql: ${tickets_cnt} ;;
+  }
+
 
   dimension: assignee_id {
     type: string
@@ -21,6 +38,7 @@ view: cont_ic_conversations {
     type: string
     sql: ${TABLE}.assignee_type ;;
   }
+
 
   dimension_group: created_at {
     type: time
@@ -51,6 +69,7 @@ view: cont_ic_conversations {
   }
 
   measure: latest {
+    description: "Check if the ticket is created the last 200 days"
     type: yesno
     sql: (${TABLE}.created_at > CURRENT_TIMESTAMP - interval '200 days');;
   }

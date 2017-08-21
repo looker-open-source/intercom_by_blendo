@@ -1,7 +1,8 @@
 view: ticket_status {
   derived_table: {
     sql: SELECT conv.part_type as part_type, tmp.up as last_update,
-      tmp.conversation_id as id, assigned_to_id as assigned_to from
+      tmp.conversation_id as id, assigned_to_id as assigned_to,
+      tmp.conversation_id from
       (SELECT max(updated_at) AS up, conversation_id
       FROM cont_ic_conversations_parts
       GROUP BY conversation_id)tmp,
@@ -9,6 +10,11 @@ view: ticket_status {
       WHERE conv.conversation_id=tmp.conversation_id
       AND conv.updated_at=tmp.up
        ;;
+  }
+
+  dimension: conversation_id {
+    type: string
+    sql: ${TABLE}.conversation_id ;;
   }
 
   dimension: assigned_to {
@@ -23,6 +29,7 @@ view: ticket_status {
 
   dimension: part_type {
     type: string
+    sql: ${TABLE}.part_type ;;
   }
 
   dimension: id {
@@ -30,20 +37,10 @@ view: ticket_status {
     sql: ${TABLE}.id ;;
   }
 
-  measure: open_tickets {
-    type: count
-    filters: {
-      field: part_type
-      value: "- close"
-    }
+  measure: tickets_count {
+    type:  count_distinct
+    sql: ${TABLE}.id ;;
   }
 
-  measure: solved_tickets {
-    type: count
-    filters: {
-      field: part_type
-      value: "close"
-    }
-  }
 
 }
