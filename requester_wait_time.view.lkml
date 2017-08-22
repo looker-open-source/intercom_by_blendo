@@ -33,6 +33,7 @@ view: requester_wait_time {
 
   dimension: id {
     primary_key: yes
+    description: "Unique identifier of conversation"
     type: string
     sql: ${TABLE}.id ;;
   }

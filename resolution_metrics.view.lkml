@@ -32,6 +32,7 @@ view: resolution_metrics {
   }
 
   dimension: conversation_id {
+    description: "Unique identifier of related conversation"
     type: string
     primary_key: yes
     sql: ${TABLE}.conversation_id ;;

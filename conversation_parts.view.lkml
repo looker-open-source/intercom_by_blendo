@@ -4,16 +4,19 @@ view: conversations_parts {
 
   dimension: id {
     primary_key: yes
+    description: "Unique identifier of conversation part"
     type: string
     sql: ${TABLE}.id ;;
   }
 
   dimension: assigned_to_id {
+    description: "Unique identifier of assignee"
     type: string
     sql: ${TABLE}.assigned_to_id ;;
   }
 
   dimension: author_id {
+    description: "Unique identifier of the author"
     type: string
     sql: ${TABLE}.author_id ;;
   }
@@ -24,39 +27,29 @@ view: conversations_parts {
   }
 
   dimension: part_type {
+    description: "Part type, i.e Comment, Close, Note, Assignment"
     type: string
     sql: ${TABLE}.part_type ;;
   }
 
   dimension: body {
+    description: "Message body"
     type: string
     sql: ${TABLE}.body ;;
   }
 
   dimension: conversation_id {
+    description: "Unique identifier of the related conversation"
     type: string
     sql: ${TABLE}.conversation_id ;;
   }
 
   dimension_group: updated {
+    description: "Upadate time"
     type: time
     timeframes: [time, date, week, month, raw]
     sql: ${TABLE}.updated_at;;
   }
-
-  measure: parts_count {
-    type:  count_distinct
-    sql: ${TABLE}.id ;;
-  }
-
-#  measure: passes {
-#    description: "Total number of assignments envolved"
-#    type: count_distinct
-#    sql_distinct_key: ${conversation_id} ;;
-#    sql: ${TABLE}.part_type = 'assignment' ;;
-#    drill_fields: [id, part_type]
-#
-#  }
 
   measure: count {
     type: count

@@ -15,22 +15,26 @@ view: ticket_stats {
   }
 
   dimension: conversation_id {
+    description: "Unique identifier of conversation"
     primary_key: yes
     type:  string
     sql: ${TABLE}.conversation_id ;;
   }
 
   dimension: comments {
+    description: "Number of comments related to the conversation"
     type: number
     sql: ${TABLE}.comments ;;
   }
 
   dimension:  close {
+    description: "Number of closures related to the conversation"
     type: number
     sql: ${TABLE}.close ;;
   }
 
   measure: new_count {
+    description: "Number of new tickets"
     type: count
     filters: {
       field: comments
@@ -44,6 +48,7 @@ view: ticket_stats {
   }
 
   measure: one_touch {
+    description: "Number of one touch tickets"
     type: count
     filters: {
       field: comments

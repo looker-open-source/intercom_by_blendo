@@ -6,20 +6,6 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
-#explore: ticket_stats {
-#  label: "Agent Statistics"
-#  join: admins {
-#    type: left_outer
-#    sql_on: (${ticket_stats.assignee_id} = ${admins.id}) ;;
-#    relationship: many_to_one
-#  }
-#  join: conversations {
-#    type: left_outer
-#    sql_on: ${conversations.assignee_id} = ${admins.id} ;;
-#    relationship: many_to_many
-#  }
-#}
-
 explore: conversations_parts {
   label: "Ticket Statistics"
   join: admins {
@@ -48,11 +34,6 @@ explore: conversations_parts {
     sql_on: ${conversations_parts.conversation_id} = ${requester_wait_time.id};;
     relationship: many_to_one
   }
-#  join: ticket_status {
-#    type: left_outer
-#    sql_on: ${conversations_parts.conversation_id} = ${ticket_status.conversation_id};;
-#    relationship: many_to_one
-#  }
 }
 
 explore: cont_ic_users {
