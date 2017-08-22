@@ -1,8 +1,6 @@
 view: ticket_stats {
   derived_table: {
-    sql: SELECT tmp.*,  cont_ic_conversations_parts.assigned_to_id, cont_ic_conversations_parts.part_type as type
-      FROM
-      (SELECT conversation_id,
+    sql: SELECT conversation_id,
       count(CASE
       WHEN part_type ='comment' THEN 1
       ELSE NULL
@@ -12,17 +10,12 @@ view: ticket_stats {
       ELSE NULL
       END) AS close
       FROM cont_ic_conversations_parts
-      GROUP BY conversation_id)tmp, cont_ic_conversations_parts
-      where tmp.conversation_id = cont_ic_conversations_parts.conversation_id
+      GROUP BY conversation_id
        ;;
   }
 
-  dimension: assignee_id {
-    type: string
-    sql: ${TABLE}.assigned_to_id ;;
-  }
-
   dimension: conversation_id {
+    primary_key: yes
     type:  string
     sql: ${TABLE}.conversation_id ;;
   }
@@ -59,19 +52,6 @@ view: ticket_stats {
     filters: {
       field: close
       value: ">0"
-    }
-  }
-
-  dimension: type {
-    type: string
-    sql: ${TABLE}.type ;;
-  }
-
-  measure: closed_count {
-    type: count
-    filters: {
-      field: type
-      value: "close"
     }
   }
 }

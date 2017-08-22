@@ -1,7 +1,8 @@
-view: cont_ic_conversations {
+view: conversations {
   sql_table_name: public.cont_ic_conversations ;;
 
   dimension: id {
+    description: "Conversation unique identifier"
     primary_key: yes
     type: string
     sql: ${TABLE}.id ;;
@@ -14,33 +15,38 @@ view: cont_ic_conversations {
   }
 
   dimension: close{
+    description: "Checks if a conversation is closed"
     type: yesno
     sql: NOT ${TABLE}.open ;;
   }
 
-  dimension: untouched{
+  dimension: read{
+    description: "Check if a conversation is read"
     type: yesno
     sql: NOT ${TABLE}.read ;;
   }
 
   measure: percent_of_tickets{
+    description: "Calculates a cell’s portion of the column total. The percentage is being calculated against the total of the displayed rows"
     type: percent_of_total
     sql: ${tickets_cnt} ;;
+    drill_fields: [tickets_cnt]
   }
 
 
   dimension: assignee_id {
+    description: "Unique identifier of the agent to whom the ticket is assigned"
     type: string
     sql: ${TABLE}.assignee_id ;;
   }
 
-  dimension: assignee_type {
-    type: string
-    sql: ${TABLE}.assignee_type ;;
-  }
-
+  #dimension: assignee_type {
+  #  type: string
+  #  sql: ${TABLE}.assignee_type ;;
+  #}
 
   dimension_group: created_at {
+    description: "Ticket's creation time"
     type: time
     timeframes: [
       raw,
@@ -55,6 +61,7 @@ view: cont_ic_conversations {
   }
 
   dimension_group: updated {
+    description: "Ticket's last update"
     type: time
     timeframes: [
       raw,
@@ -68,11 +75,11 @@ view: cont_ic_conversations {
     sql: ${TABLE}.updated_at ;;
   }
 
-  measure: latest {
-    description: "Check if the ticket is created the last 200 days"
-    type: yesno
-    sql: (${TABLE}.created_at > CURRENT_TIMESTAMP - interval '200 days');;
-  }
+  #measure: latest {
+  #  description: "Check if the ticket is created the last 200 days"
+  #  type: yesno
+  #  sql: (${TABLE}.created_at > CURRENT_TIMESTAMP - interval '200 days');;
+  #}
 
 
 

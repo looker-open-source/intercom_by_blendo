@@ -1,4 +1,4 @@
-view: req_wait_time {
+view: requester_wait_time {
   derived_table: {
     sql:SELECT EXTRACT(epoch FROM SUM (timeDif))/3600 as tD ,
               id
@@ -55,13 +55,5 @@ view: req_wait_time {
   measure: median_requester_wait_time {
     type: median
     sql:${TABLE}.tD  ;;
-  }
-
-  dimension_group: date {
-
-    type: time
-    timeframes: [date, day_of_week, week, month]
-    sql: ${TABLE}.date ;;
-    drill_fields: [date_date, date_day_of_week, date_week, date_month]
   }
 }

@@ -68,17 +68,17 @@
   - name: Ticket Closures
     title: Ticket Closures
     model: intercom
-    explore: cont_ic_conversations_parts
-    type: looker_column
+    explore: conversations_parts
+    type: looker_line
     fields:
-    - ticket_status.tickets_count
-    - cont_ic_conversations_parts.updated_month
+    - conversations_parts.updated_month
+    - conversations_parts.count
     fill_fields:
-    - cont_ic_conversations_parts.updated_month
+    - conversations_parts.updated_month
     filters:
-      cont_ic_conversations_parts.part_type: close
+      conversations_parts.part_type: close
     sorts:
-    - cont_ic_conversations_parts.updated_month desc
+    - conversations_parts.updated_month desc
     limit: 500
     column_limit: 50
     stacking: ''
@@ -98,14 +98,14 @@
     show_x_axis_ticks: true
     x_axis_scale: auto
     y_axis_scale_mode: linear
+    show_null_points: true
+    point_style: none
+    interpolation: linear
     ordering: none
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
-    show_null_points: true
-    point_style: none
-    interpolation: linear
     series_types: {}
     row: 0
     col: 12
@@ -114,19 +114,19 @@
   - name: Percent of Tickets Solved
     title: Percent of Tickets Solved
     model: intercom
-    explore: cont_ic_conversations_parts
+    explore: conversations_parts
     type: looker_column
     fields:
-    - cont_ic_conversations.close
-    - cont_ic_conversations.percent_of_tickets
+    - conversations.percent_of_tickets
+    - conversations.close
     fill_fields:
-    - cont_ic_conversations.close
+    - conversations.close
     sorts:
-    - cont_ic_conversations.close
+    - conversations.percent_of_tickets desc
     limit: 500
     column_limit: 50
     stacking: ''
-    show_value_labels: false
+    show_value_labels: true
     label_density: 25
     legend_position: center
     x_axis_gridlines: false
@@ -147,6 +147,73 @@
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
+    show_null_points: true
+    point_style: none
+    interpolation: linear
+    value_labels: legend
+    label_type: labPer
+    series_types: {}
+    row: 7
+    col: 0
+    width: 6
+    height: 8
+  - name: Ticket Creation
+    title: Ticket Creation
+    model: intercom
+    explore: conversations_parts
+    type: looker_line
+    fields:
+    - conversations.created_at_month
+    - conversations.tickets_cnt
+    fill_fields:
+    - conversations.created_at_month
+    filters:
+      admins.name: "-NULL"
+    sorts:
+    - conversations.created_at_month desc
+    limit: 500
+    column_limit: 50
+    stacking: ''
+    show_value_labels: false
+    label_density: 25
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: true
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    show_null_points: true
+    point_style: none
+    interpolation: linear
+    value_labels: legend
+    label_type: labPer
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    series_types: {}
+    row: 7
+    col: 12
+    width: 12
+    height: 8
+  - name: One Touch Tickets
+    title: One Touch Tickets
+    model: intercom
+    explore: conversations_parts
+    type: single_value
+    fields:
+    - ticket_stats.one_touch
+    limit: 500
+    column_limit: 50
     custom_color_enabled: false
     custom_color: forestgreen
     show_single_value_title: true
@@ -154,130 +221,46 @@
     comparison_type: value
     comparison_reverse_colors: false
     show_comparison_label: true
-    leftAxisLabelVisible: false
-    leftAxisLabel: ''
-    rightAxisLabelVisible: false
-    rightAxisLabel: ''
-    barColors:
-    - red
-    - blue
-    smoothedBars: false
-    orientation: automatic
-    labelPosition: left
-    percentType: total
-    percentPosition: inline
-    valuePosition: right
-    labelColorEnabled: false
-    labelColor: "#FFF"
-    series_types: {}
-    row: 7
-    col: 0
-    width: 6
-    height: 7
-  - name: Reassigned Tickets
-    title: Reassigned Tickets
-    model: intercom
-    explore: cont_ic_conversations_parts
-    type: looker_area
-    fields:
-    - cont_ic_conversations.created_at_month
-    - cont_ic_conversations_parts.tickets_cnt
-    filters:
-      cont_ic_conversations_parts.passes: ">1"
-    sorts:
-    - cont_ic_conversations.created_at_month desc
-    limit: 500
-    column_limit: 50
-    stacking: ''
-    show_value_labels: false
-    label_density: 25
-    legend_position: center
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_view_names: true
-    limit_displayed_rows: false
-    y_axis_combined: true
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: true
-    show_x_axis_ticks: true
-    x_axis_scale: auto
-    y_axis_scale_mode: linear
-    show_null_points: true
-    point_style: none
-    interpolation: linear
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    ordering: none
-    show_null_labels: false
-    series_types: {}
-    row: 7
-    col: 12
-    width: 12
-    height: 7
-  - name: Ticket Creation
-    title: Ticket Creation
-    model: intercom
-    explore: cont_ic_conversations_parts
-    type: looker_area
-    fields:
-    - cont_ic_conversations.tickets_cnt
-    - cont_ic_conversations.created_at_month
-    fill_fields:
-    - cont_ic_conversations.created_at_month
-    sorts:
-    - cont_ic_conversations.created_at_month desc
-    limit: 500
-    column_limit: 50
-    stacking: ''
-    show_value_labels: false
-    label_density: 25
-    legend_position: center
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_view_names: true
-    limit_displayed_rows: false
-    y_axis_combined: true
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: true
-    show_x_axis_ticks: true
-    x_axis_scale: auto
-    y_axis_scale_mode: linear
-    show_null_points: true
-    point_style: none
-    interpolation: linear
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    ordering: none
-    show_null_labels: false
-    series_types: {}
-    row: 14
+    row: 15
     col: 6
-    width: 12
-    height: 8
-  - name: Untouched Tickets
-    title: Untouched Tickets
+    width: 6
+    height: 6
+  - name: New Tickets
+    title: New Tickets
     model: intercom
-    explore: cont_ic_conversations_parts
+    explore: conversations_parts
+    type: single_value
+    fields:
+    - ticket_stats.new_count
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: false
+    custom_color: forestgreen
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    row: 15
+    col: 12
+    width: 6
+    height: 6
+  - name: Read Conversations
+    title: Read Conversations
+    model: intercom
+    explore: conversations_parts
     type: looker_column
     fields:
-    - cont_ic_conversations.percent_of_tickets
-    - cont_ic_conversations.untouched
+    - conversations.percent_of_tickets
+    - conversations.read
     fill_fields:
-    - cont_ic_conversations.untouched
+    - conversations.read
     sorts:
-    - cont_ic_conversations.percent_of_tickets desc
+    - conversations.percent_of_tickets desc
     limit: 500
     column_limit: 50
     stacking: ''
-    show_value_labels: false
+    show_value_labels: true
     label_density: 25
     legend_position: center
     x_axis_gridlines: false
@@ -298,20 +281,7 @@
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
-    show_null_points: true
-    point_style: none
-    interpolation: linear
-    show_row_numbers: true
-    truncate_column_names: false
-    hide_totals: false
-    hide_row_totals: false
-    table_theme: editable
-    enable_conditional_formatting: false
-    conditional_formatting_ignored_fields: []
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    series_types: {}
     row: 7
     col: 6
     width: 6
-    height: 7
+    height: 8

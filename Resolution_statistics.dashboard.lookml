@@ -5,20 +5,18 @@
   - name: First Resolution
     title: First Resolution
     model: intercom
-    explore: cont_ic_conversations_parts
+    explore: conversations_parts
     type: looker_line
     fields:
+    - resolution_metrics.date_month
     - resolution_metrics.first_Resolution_average
     - resolution_metrics.first_Resolution_maximum
     - resolution_metrics.first_Resolution_median
     - resolution_metrics.first_Resolution_minimum
-    - resolution_metrics.date_week
     fill_fields:
-    - resolution_metrics.date_week
-    filters:
-      resolution_metrics.date_month: NOT NULL
+    - resolution_metrics.date_month
     sorts:
-    - resolution_metrics.date_week desc
+    - resolution_metrics.date_month desc
     limit: 500
     column_limit: 50
     stacking: ''
@@ -41,13 +39,16 @@
     show_null_points: true
     point_style: none
     interpolation: linear
-    ordering: none
-    show_null_labels: false
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
+    show_row_numbers: true
+    truncate_column_names: false
+    hide_totals: false
+    hide_row_totals: false
+    table_theme: editable
+    enable_conditional_formatting: false
+    conditional_formatting_ignored_fields: []
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
     series_types: {}
-    focus_on_hover: true
     row: 0
     col: 0
     width: 12
@@ -55,20 +56,18 @@
   - name: First Response
     title: First Response
     model: intercom
-    explore: cont_ic_conversations_parts
+    explore: conversations_parts
     type: looker_line
     fields:
     - resolution_metrics.first_Response_average
     - resolution_metrics.first_Response_maximum
     - resolution_metrics.first_Response_median
     - resolution_metrics.first_Response_minimum
-    - resolution_metrics.date_week
+    - resolution_metrics.date_month
     fill_fields:
-    - resolution_metrics.date_week
-    filters:
-      resolution_metrics.date_month: NOT NULL
+    - resolution_metrics.date_month
     sorts:
-    - resolution_metrics.date_week desc
+    - resolution_metrics.date_month desc
     limit: 500
     column_limit: 50
     stacking: ''
@@ -104,20 +103,18 @@
   - name: Full Resolution
     title: Full Resolution
     model: intercom
-    explore: cont_ic_conversations_parts
+    explore: conversations_parts
     type: looker_line
     fields:
     - resolution_metrics.full_Resolution_average
     - resolution_metrics.full_Resolution_maximum
     - resolution_metrics.full_Resolution_median
     - resolution_metrics.full_Resolution_minimum
-    - resolution_metrics.date_week
+    - resolution_metrics.date_month
     fill_fields:
-    - resolution_metrics.date_week
-    filters:
-      resolution_metrics.date_month: NOT NULL
+    - resolution_metrics.date_month
     sorts:
-    - resolution_metrics.date_week desc
+    - resolution_metrics.date_month desc
     limit: 500
     column_limit: 50
     stacking: ''
@@ -153,18 +150,18 @@
   - name: Requester Wait Time
     title: Requester Wait Time
     model: intercom
-    explore: cont_ic_conversations_parts
+    explore: conversations_parts
     type: looker_line
     fields:
-    - cont_ic_conversations.created_at_month
-    - req_wait_time.average_requester_wait_time
-    - req_wait_time.maximum_requester_wait_time
-    - req_wait_time.median_requester_wait_time
-    - req_wait_time.minimum_requester_wait_time
+    - requester_wait_time.average_requester_wait_time
+    - requester_wait_time.maximum_requester_wait_time
+    - requester_wait_time.median_requester_wait_time
+    - requester_wait_time.minimum_requester_wait_time
+    - resolution_metrics.date_month
     fill_fields:
-    - cont_ic_conversations.created_at_month
+    - resolution_metrics.date_month
     sorts:
-    - cont_ic_conversations.created_at_month desc
+    - resolution_metrics.date_month desc
     limit: 500
     column_limit: 50
     stacking: ''
